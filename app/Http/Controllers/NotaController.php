@@ -12,12 +12,19 @@ class NotaController extends Controller
 {
     // Professor
     public function create()
-    {
-        $turmas = Turma::where('professor_id', Auth::id())->get();
-        $alunos = User::where('role', 'aluno')->get();
+{
+    $turmas = Turma::where('professor_id', Auth::id())->get();
 
-        return view('notas.create', compact('turmas', 'alunos'));
-    }
+    $alunos = User::where('role', 'aluno')
+        ->whereHas('notasComoAluno', function ($q) {
+            $q->whereIn('turma_id', Turma::where('professor_id', Auth::id())->pluck('id'));
+        })
+        ->orWhereDoesntHave('notasComoAluno')
+        ->get();
+
+    return view('notas.create', compact('turmas', 'alunos'));
+}
+
 
     public function store(Request $request)
     {

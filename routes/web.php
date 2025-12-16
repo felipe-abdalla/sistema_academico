@@ -7,6 +7,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
+Route::redirect('/', '/login');
+
+Route::get('/register', [AuthController::class, 'showRegister']);
+Route::post('/register', [AuthController::class, 'register']);
+
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
@@ -37,5 +42,3 @@ Route::middleware(['auth', 'role:professor'])->group(function () {
 Route::middleware(['auth', 'role:aluno'])->group(function () {
     Route::get('/notas', [NotaController::class, 'indexAluno'])->name('minhas-notas');
 });
-
-

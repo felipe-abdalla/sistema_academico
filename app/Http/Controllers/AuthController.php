@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Mostra o formulário de login
+    // Login
     public function showLogin()
     {
         return view('auth.login');
     }
 
-    // Processa o login
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -23,7 +24,6 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
             return redirect()->route('dashboard');
         }
 
@@ -32,12 +32,35 @@ class AuthController extends Controller
         ]);
     }
 
+    // Cadastro
+    public function showRegister()
+    {
+        return view('auth.register');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed|min:6',
+            'role' => 'required|in:admin,professor,aluno',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
+
+        return redirect('/login')->with('success', 'Usuário cadastrado com sucesso!');
+    }
 
     // Logout
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

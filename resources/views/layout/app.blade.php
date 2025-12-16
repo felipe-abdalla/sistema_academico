@@ -3,6 +3,9 @@
 <head>
     <title>Sistema Acadêmico</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    {{-- MOVIDO PARA CÁ: Chart.js no head para carregar antes dos scripts da página --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="container mt-4">
 
