@@ -3,27 +3,40 @@
 @section('content')
 <h2 class="mb-4">Painel Administrativo</h2>
 
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
 {{-- Cartões de Acesso Rápido --}}
 <div class="row mb-5">
-    <div class="col-md-6 mb-3">
+    <div class="col-md-4 mb-3">
         <div class="card h-100 shadow-sm border-primary">
             <div class="card-body text-center">
                 <h5 class="card-title text-primary">Disciplinas</h5>
-                <a href="{{ route('disciplinas.index') }}" class="btn btn-outline-primary w-100">Gerenciar Disciplinas</a>
+                <a href="{{ route('disciplinas.index') }}" class="btn btn-outline-primary w-100">Gerenciar</a>
             </div>
         </div>
     </div>
-    <div class="col-md-6 mb-3">
+    <div class="col-md-4 mb-3">
         <div class="card h-100 shadow-sm border-success">
             <div class="card-body text-center">
                 <h5 class="card-title text-success">Turmas</h5>
-                <a href="{{ route('turmas.index') }}" class="btn btn-outline-success w-100">Gerenciar Turmas</a>
+                <a href="{{ route('turmas.index') }}" class="btn btn-outline-success w-100">Gerenciar</a>
+            </div>
+        </div>
+    </div>
+    {{-- NOVO: Cartão de Usuários --}}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm border-warning">
+            <div class="card-body text-center">
+                <h5 class="card-title text-warning">Usuários</h5>
+                <a href="{{ route('register') }}" class="btn btn-outline-warning w-100">Cadastrar Novo</a>
             </div>
         </div>
     </div>
 </div>
 
-{{-- Área de Gráficos --}}
+{{-- Área de Gráficos (MANTIDA IGUAL AO ANTERIOR) --}}
 <div class="row">
     <div class="col-md-6">
         <div class="card shadow-sm">
@@ -49,7 +62,6 @@
     new Chart(ctxDisc, {
         type: 'bar',
         data: {
-            // CORREÇÃO: json_encode para evitar erro no editor
             labels: {!! json_encode($labelsDisc) !!},
             datasets: [{
                 label: 'Qtd. de Turmas',

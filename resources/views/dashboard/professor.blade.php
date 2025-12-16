@@ -16,16 +16,29 @@
                     <p class="p-3 text-muted">Nenhuma turma vinculada.</p>
                 @else
                     <table class="table table-striped mb-0">
-                        <thead><tr><th>Turma</th><th>Disciplina</th></tr></thead>
-                        <tbody>
-                            @foreach($turmas as $turma)
-                            <tr>
-                                <td>{{ $turma->nome }}</td>
-                                <td>{{ $turma->disciplina->nome ?? 'N/A' }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+        <thead>
+            <tr>
+                <th>Turma</th>
+                <th>Disciplina</th>
+                <th>Ações</th> {{-- Coluna Adicionada --}}
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($turmas as $turma)
+            <tr>
+                <td>{{ $turma->nome }}</td>
+                <td>{{ $turma->disciplina->nome ?? 'N/A' }}</td>
+                <td>
+                    {{-- Botão para o Professor adicionar alunos --}}
+                    <a href="{{ route('turmas.matriculas', $turma) }}" class="btn btn-sm btn-outline-primary">
+                        Gerenciar Alunos
+                    </a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+                    
                 @endif
             </div>
         </div>

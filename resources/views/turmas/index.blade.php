@@ -21,12 +21,18 @@
         <td>{{ $turma->disciplina->nome ?? 'Sem Disciplina' }}</td>
         <td>{{ $turma->professor->name ?? 'Sem Professor' }}</td>
         <td>
-            <a href="{{ route('turmas.edit', $turma) }}" class="btn btn-sm btn-warning">Editar</a>
-            <form action="{{ route('turmas.destroy', $turma) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza?');">
-                @csrf @method('DELETE')
-                <button class="btn btn-sm btn-danger">Excluir</button>
-            </form>
-        </td>
+        {{-- Botão Gerenciar Alunos --}}
+        <a href="{{ route('turmas.matriculas', $turma) }}" class="btn btn-sm btn-info text-white">
+            Gerenciar Alunos ({{ $turma->alunos()->count() }})
+        </a>
+
+        <a href="{{ route('turmas.edit', $turma) }}" class="btn btn-sm btn-warning">Editar</a>
+        
+        <form action="{{ route('turmas.destroy', $turma) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza?');">
+            @csrf @method('DELETE')
+            <button class="btn btn-sm btn-danger">Excluir</button>
+        </form>
+    </td>
     </tr>
     @endforeach
     </tbody>

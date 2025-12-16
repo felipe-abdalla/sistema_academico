@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Login
     public function showLogin()
     {
         return view('auth.login');
@@ -32,7 +31,6 @@ class AuthController extends Controller
         ]);
     }
 
-    // Cadastro
     public function showRegister()
     {
         return view('auth.register');
@@ -54,10 +52,9 @@ class AuthController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect('/login')->with('success', 'Usuário cadastrado com sucesso!');
+        return redirect()->route('dashboard')->with('success', 'Novo usuário cadastrado com sucesso!');
     }
 
-    // Logout
     public function logout(Request $request)
     {
         Auth::logout();

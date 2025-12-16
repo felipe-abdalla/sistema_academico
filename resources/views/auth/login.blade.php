@@ -13,6 +13,12 @@
                     </div>
                 @endif
 
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <form method="POST" action="/login">
                     @csrf
 
@@ -28,10 +34,6 @@
 
                     <button class="btn btn-primary w-100 mb-2">Entrar</button>
                     
-                    <div class="text-center">
-                        <span class="text-muted">ou</span>
-                    </div>
-                    <a href="/register" class="btn btn-outline-secondary w-100 mt-2">Criar Nova Conta</a>
                 </form>
             </div>
         </div>

@@ -69,4 +69,7 @@ class User extends Authenticatable
     {
         return $this->role === 'aluno';
     }
+    public function turmasMatriculadas() {
+    return $this->belongsToMany(Turma::class, 'aluno_turma', 'aluno_id', 'turma_id');
+}
 }
