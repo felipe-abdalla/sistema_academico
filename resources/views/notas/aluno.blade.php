@@ -8,12 +8,13 @@
         Nenhuma nota lançada ainda.
     </div>
 @else
-<table class="table table-bordered">
-    <thead>
+<table class="table table-bordered table-hover">
+    <thead class="table-light">
         <tr>
             <th>Disciplina</th>
             <th>Turma</th>
-            <th>Nota</th>
+            <th>Composição da Nota</th> {{-- Nova Coluna --}}
+            <th>Total Acumulado</th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +22,22 @@
             <tr>
                 <td>{{ $nota->turma->disciplina->nome }}</td>
                 <td>{{ $nota->turma->nome }}</td>
-                <td>{{ $nota->valor }}</td>
+                
+                {{-- Exibe o histórico (ex: 10 + 20 + 5) --}}
+                <td class="text-muted fst-italic">
+                    {{ $nota->historico ?? $nota->valor }}
+                </td>
+
+                <td class="fw-bold fs-5">
+                    {{ $nota->valor }}
+                    
+                    {{-- Badge de status --}}
+                    @if($nota->valor >= 60)
+                        <span class="badge bg-success fs-6 ms-2">Aprovado</span>
+                    @else
+                        <span class="badge bg-danger fs-6 ms-2">Reprovado</span>
+                    @endif
+                </td>
             </tr>
         @endforeach
     </tbody>

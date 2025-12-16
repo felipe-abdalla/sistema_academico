@@ -41,25 +41,55 @@ class NotaController extends Controller
             'valor'    => 'required|numeric|min:0|max:100',
         ]);
 
-        // Validação Extra de Segurança
+        // Validação de Segurança (Professor dono da turma / Aluno matriculado)
         $turma = Turma::findOrFail($request->turma_id);
         
-        // Verifica se professor é dono da turma
         if ($turma->professor_id !== Auth::id()) {
             abort(403, 'Acesso não autorizado a esta turma.');
         }
 
-        // Verifica se aluno realmente pertence à turma (Regra Sofisticada)
         if (!$turma->alunos()->where('users.id', $request->aluno_id)->exists()) {
             return back()->withErrors(['aluno_id' => 'Este aluno não está matriculado nesta turma.']);
         }
 
-        Nota::create($request->all());
+        // --- LÓGICA DE SOMA DE NOTAS ---
+        
+        // 1. Tenta encontrar uma nota existente para este aluno nesta turma
+        $notaExistente = Nota::where('turma_id', $request->turma_id)
+                             ->where('aluno_id', $request->aluno_id)
+                             ->first();
 
-        // Redireciona mantendo a turma selecionada para facilitar lançamentos em sequência
+        if ($notaExistente) {
+            // CENÁRIO A: Nota já existe, vamos somar
+            $novoTotal = $notaExistente->valor + $request->valor;
+
+            // Opcional: Impedir que a soma ultrapasse 100
+            if ($novoTotal > 100) {
+                return back()->withErrors(['valor' => "A soma das notas ({$notaExistente->valor} + {$request->valor}) ultrapassa o limite de 100."]);
+            }
+
+            $notaExistente->update([
+                'valor' => $novoTotal,
+                // Concatena o histórico: "10 + 20" vira "10 + 20 + 5"
+                'historico' => $notaExistente->historico . ' + ' . $request->valor
+            ]);
+
+            $mensagem = 'Nota adicionada ao total existente!';
+        } else {
+            // CENÁRIO B: Primeira nota nesta turma
+            Nota::create([
+                'turma_id' => $request->turma_id,
+                'aluno_id' => $request->aluno_id,
+                'valor'    => $request->valor,
+                'historico' => (string) $request->valor // O histórico inicial é o próprio valor
+            ]);
+
+            $mensagem = 'Primeira nota lançada com sucesso!';
+        }
+
         return redirect()
             ->route('notas.create', ['turma_id' => $request->turma_id])
-            ->with('success', 'Nota lançada com sucesso!');
+            ->with('success', $mensagem);
     }
 
     public function edit(Nota $nota)

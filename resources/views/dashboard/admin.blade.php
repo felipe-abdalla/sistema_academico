@@ -26,15 +26,17 @@
         </div>
     </div>
     {{-- NOVO: Cartão de Usuários --}}
-    <div class="col-md-4 mb-3">
+   <div class="col-md-4 mb-3">
         <div class="card h-100 shadow-sm border-warning">
             <div class="card-body text-center">
                 <h5 class="card-title text-warning">Usuários</h5>
-                <a href="{{ route('register') }}" class="btn btn-outline-warning w-100">Cadastrar Novo</a>
+                {{-- Link alterado de 'register' para 'users.index' --}}
+                <a href="{{ route('users.index') }}" class="btn btn-outline-warning w-100">
+                    Gerenciar Usuários
+                </a>
             </div>
         </div>
     </div>
-</div>
 
 {{-- Área de Gráficos (MANTIDA IGUAL AO ANTERIOR) --}}
 <div class="row">

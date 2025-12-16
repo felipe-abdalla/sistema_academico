@@ -5,6 +5,7 @@ use App\Http\Controllers\TurmaController;
 use App\Http\Controllers\NotaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController; // <--- Importação necessária
 use Illuminate\Support\Facades\Route;
 
 // Redirecionamento inicial
@@ -40,7 +41,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('disciplinas', DisciplinaController::class);
     Route::resource('turmas', TurmaController::class);
 
-    // Cadastro de novos usuários (Exclusivo Admin)
+    // Gerenciamento de Usuários (Listagem, Edição, Exclusão)
+    // create e store são tratados pelas rotas de /register abaixo
+    Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
+
+    // Cadastro de novos usuários (Create/Store)
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 });

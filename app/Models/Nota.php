@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Nota extends Model
 {
-    protected $fillable = ['turma_id', 'aluno_id', 'valor'];
+    protected $fillable = ['turma_id', 'aluno_id', 'valor', 'historico'];
 
     public function turma() {
         return $this->belongsTo(Turma::class);
